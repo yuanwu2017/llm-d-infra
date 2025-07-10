@@ -254,7 +254,8 @@ install() {
       log_info "⚠️ ServiceMonitor CRD (monitoring.coreos.com) not found. Installing Prometheus stack."
       install_prometheus_grafana
     else
-      log_info "Skipping Prometheus installation as ServiceMonitor CRD already exists."
+      log_info "ServiceMonitor CRD found. Verifying Prometheus installation..."
+      install_prometheus_grafana
     fi
     log_info "Metrics collection enabled"
   fi
