@@ -1,0 +1,11 @@
+gateway:
+  enabled: true
+  gatewayClassName: istio
+  listeners:
+    - name: default
+      path: /
+      port: 80
+      protocol: HTTP
+  serviceType: NodePort
+ingress:
+  enabled: false
