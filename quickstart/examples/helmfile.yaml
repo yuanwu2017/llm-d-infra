@@ -1,10 +1,6 @@
-# repositories:
-#   - name: llm-d-infra-repo
-#     url: https://github.com/llm-d-incubation/llm-d-infra
-#   - name: llm-d-modelservice-repo
-#     url: https://github.com/llm-d-incubation/llm-d-modelservice
-#   - name: gie-inferencepool-repo
-#     url: https://github.com/kubernetes-sigs/gateway-api-inference-extension/blob/main/config/charts/inferencepool
+repositories:
+  - name: llm-d-modelservice
+    url: https://llm-d-incubation.github.io/llm-d-modelservice/
 
 releases:
   - name: istio-base
@@ -28,7 +24,8 @@ releases:
 
   - name: infra-facebook
     namespace: llm-d
-    chart: ../../charts/llm-d-infra/
+    chart: oci://ghcr.io/llm-d-incubation/llm-d-infra/llm-d-infra
+    version: 1.0.1
     installed: true
     needs:
       - istio-system/istio-base
@@ -38,7 +35,7 @@ releases:
 
   - name: ms-facebook
     namespace: llm-d
-    chart: git::https://github.com/llm-d-incubation/llm-d-modelservice.git//charts/llm-d-modelservice?ref=llm-d-modelservice-0.0.8
+    chart: llm-d-modelservice/llm-d-modelservice
     version: 0.0.8
     installed: true
     needs:
