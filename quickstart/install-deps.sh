@@ -87,6 +87,12 @@ fi
 
 if ! command -v helmfile &> /dev/null; then
   echo "📦 helmfile not found. Installing..."
+  HELMFILE_VERSION="v0.162.0"
+  HELMFILE_URL="https://github.com/helmfile/helmfile/releases/download/${HELMFILE_VERSION}/helmfile_${OS}_${ARCH}"
+  INSTALL_DIR="/usr/local/bin"
+  curl -fsSL -o "/tmp/helmfile" "$HELMFILE_URL"
+  chmod +x "${INSTALL_DIR}/helmfile"
+fi
 
 # Install kustomize
 if ! command -v kustomize &> /dev/null; then
