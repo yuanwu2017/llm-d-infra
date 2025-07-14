@@ -1,0 +1,21 @@
+# benchmark-client-interactive-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: benchmark-interactive
+  namespace: llm-d
+  labels:
+      app: benchmark-interactive
+spec:
+  containers:
+    - name: benchmark-runner
+      image: "quay.io/tms/pd-disagg-benchmark:0.0.6"
+      imagePullPolicy: Always
+      stdin: true
+      tty: true
+      resources:
+        requests:
+          memory: "2Gi"
+        limits:
+          memory: "2Gi"
+  restartPolicy: Never
