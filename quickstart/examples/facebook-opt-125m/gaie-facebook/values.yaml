@@ -1,12 +1,12 @@
 inferenceExtension:
   replicas: 1
   image:
-    # name: llm-d-inference-scheduler
-    # hub: ghcr.io/llm-d
-    # tag: 0.0.4
-    name: epp
-    hub: us-central1-docker.pkg.dev/k8s-staging-images/gateway-api-inference-extension
-    tag: main
+    name: llm-d-inference-scheduler
+    hub: ghcr.io/llm-d
+    tag: 0.0.4
+    # name: epp
+    # hub: us-central1-docker.pkg.dev/k8s-staging-images/gateway-api-inference-extension
+    # tag: main
     pullPolicy: Always
   extProcPort: 9002
   env:

@@ -12,7 +12,10 @@ routing:
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
-      name: llm-d-infra-inference-gateway
+      name: infra-facebook-inference-gateway
+
+  inferenceModel:
+    create: true
 
   inferencePool:
     create: false
@@ -20,10 +23,6 @@ routing:
 
   httpRoute:
     create: true
-    matches:
-      - path:
-          type: PathPrefix
-          value: /
 
   epp:
     create: false

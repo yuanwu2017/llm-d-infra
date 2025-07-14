@@ -83,6 +83,11 @@ if ! command -v helm &> /dev/null; then
   rm -rf "${OS}-${ARCH}" "${TARBALL}"
 fi
 
+# Install Helmfile
+
+if ! command -v helmfile &> /dev/null; then
+  echo "📦 helmfile not found. Installing..."
+
 # Install kustomize
 if ! command -v kustomize &> /dev/null; then
   echo "Installing Kustomize..."

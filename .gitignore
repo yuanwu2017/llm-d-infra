@@ -13,6 +13,3 @@
 *.tmp
 *.orig
 *~
-
-# Quickstart stuff
-quickstart/examples/llm-d-infra/istio-values.yaml

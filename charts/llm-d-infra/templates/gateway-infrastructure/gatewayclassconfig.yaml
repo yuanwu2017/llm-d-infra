@@ -1,0 +1,15 @@
+{{ if and .Values.gateway.enabled (eq .Values.gateway.gatewayClassName "istio")}}
+apiVersion: istio.io/v1alpha1
+kind: GatewayClass
+metadata:
+  name: istio-custom
+spec:
+  controller: istio.io/gateway-controller
+  proxyConfig:
+    environmentVariables:
+      - name: ISTIO_PROXY_LOG_LEVEL
+        value: debug
+      - name: PROXY_CONFIG
+        value: |
+          {"proxyMetadata": {"ISTIO_META_LOG_LEVEL": "debug"}}
+{{- end}}

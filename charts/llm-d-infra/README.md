@@ -98,6 +98,9 @@ Kubernetes: `>= 1.30.0-0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| auth.hf_token.enabled | bool | `true` |  |
+| auth.hf_token.secretKey | string | `"HF_TOKEN"` |  |
+| auth.hf_token.secretName | string | `"llm-d-hf-token"` |  |
 | clusterDomain | string | `"cluster.local"` | Default Kubernetes cluster domain |
 | common | object | `{}` | Parameters for bitnami.common dependency |
 | commonAnnotations | object | `{}` | Annotations to add to all deployed objects |
@@ -161,6 +164,9 @@ Kubernetes: `>= 1.30.0-0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| auth.hf_token.enabled | bool | `true` |  |
+| auth.hf_token.secretKey | string | `"HF_TOKEN"` |  |
+| auth.hf_token.secretName | string | `"llm-d-hf-token"` |  |
 | clusterDomain | string | `"cluster.local"` | Default Kubernetes cluster domain |
 | common | object | `{}` | Parameters for bitnami.common dependency |
 | commonAnnotations | object | `{}` | Annotations to add to all deployed objects |
