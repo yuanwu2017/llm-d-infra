@@ -194,6 +194,21 @@ setup_env() {
   fi
 }
 
+validate_hf_token() {
+  HF_SECRET_ENABLED=$(yq -r .auth.hf_token.enabled "${VALUES_PATH}")
+  if [[ "${HF_SECRET_ENABLED}" == "true" ]]; then
+    if [[ "$ACTION" == "install" ]]; then
+        # HF_TOKEN from the env
+        [[ -n "${HF_TOKEN:-}" ]] || die "HF_TOKEN not set; Run: export HF_TOKEN=<your_token>"
+        log_success "HF_TOKEN validated"
+    fi
+    HF_NAME=$(yq -r .auth.hf_token.secretName "${VALUES_PATH}")
+    HF_KEY=$(yq -r .auth.hf_token.secretKey  "${VALUES_PATH}")
+    [[ -n "${HF_NAME:-}" ]] || die "\`.auth.hf_token.secretName not set - set this in your values file: ${VALUES_PATH}"
+    [[ -n "${HF_KEY:-}" ]] || die "\`.auth.hf_token.secretKEY not set - set this in your values file: ${VALUES_PATH}"
+  fi
+}
+
 validate_gateway_type() {
   if [[ "${GATEWAY_TYPE}" != "istio" && "${GATEWAY_TYPE}" != "kgateway" ]]; then
     die "Invalid gateway type: ${GATEWAY_TYPE}. Supported types are: istio, kgateway."
@@ -216,7 +231,17 @@ install() {
   log_success "Namespace ready"
 
   cd "${CHART_DIR}"
-  resolve_values
+
+
+  if [[ "${HF_SECRET_ENABLED}" == "true" ]]; then
+    log_info "🔐 Creating/updating HF token secret..."
+    $KCMD delete secret "${HF_NAME}" -n "${NAMESPACE}" --ignore-not-found
+    $KCMD create secret generic "${HF_NAME}" \
+        --namespace "${NAMESPACE}" \
+        --from-literal="${HF_KEY}=${HF_TOKEN}" \
+        --dry-run=client -o yaml | $KCMD apply -n "${NAMESPACE}" -f -
+    log_success "HF token secret \`${HF_NAME}\` created with secret stored in key \`${HF_KEY}\`"
+  fi
 
   # can be fetched non-invasily if using kgateway or not
   fetch_kgateway_proxy_uid
@@ -452,7 +477,9 @@ main() {
 
   # Check cluster reachability as a pre-requisite
   check_cluster_reachability
+  resolve_values
 
+  validate_hf_token
   validate_gateway_type
 
   if [[ "$ACTION" == "install" ]]; then

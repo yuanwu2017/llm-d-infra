@@ -160,3 +160,9 @@ ingress:
 
   # -- used as part of the host dirivation if not specified from OCP cluster domain (dont edit)
   clusterRouterBase: ""
+
+auth:
+  hf_token:
+    enabled: true
+    secretName: llm-d-hf-token
+    secretKey: HF_TOKEN

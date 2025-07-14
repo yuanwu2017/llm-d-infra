@@ -32,7 +32,7 @@ spec:
       port: {{ .port }}
       protocol: {{ .protocol }}
   {{- end }}
-  {{- if and .Values.gateway.kGatewayParameters.proxyUID  (eq .Values.gateway.gatewayClassName "kgateway") }}
+  {{- if eq .Values.gateway.gatewayClassName "kgateway" }}
   infrastructure:
     parametersRef:
       name: {{ include "gateway.fullname" . }}

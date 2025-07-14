@@ -1,6 +1,6 @@
 # llm-d-infra Helm Chart
 
-![Version: 1.0.1](https://img.shields.io/badge/Version-1.0.1-informational?style=flat-square)
+![Version: 1.0.2](https://img.shields.io/badge/Version-1.0.2-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 llm-d-infra are the infrastructure components surrounding the llm-d system - a Kubernetes-native high-performance distributed LLM inference framework
@@ -98,6 +98,9 @@ Kubernetes: `>= 1.30.0-0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| auth.hf_token.enabled | bool | `true` |  |
+| auth.hf_token.secretKey | string | `"HF_TOKEN"` |  |
+| auth.hf_token.secretName | string | `"llm-d-hf-token"` |  |
 | clusterDomain | string | `"cluster.local"` | Default Kubernetes cluster domain |
 | common | object | `{}` | Parameters for bitnami.common dependency |
 | commonAnnotations | object | `{}` | Annotations to add to all deployed objects |
@@ -135,7 +138,7 @@ This chart deploys all infrastructure required to run the [llm-d](https://llm-d.
 - An optional ingress to sit in front of the gateway
 # llm-d-infra
 
-![Version: 1.0.1](https://img.shields.io/badge/Version-1.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1](https://img.shields.io/badge/AppVersion-0.1-informational?style=flat-square)
+![Version: 1.0.2](https://img.shields.io/badge/Version-1.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1](https://img.shields.io/badge/AppVersion-0.1-informational?style=flat-square)
 
 llm-d-infra are the infrastructure components surrounding the llm-d system - a Kubernetes-native high-performance distributed LLM inference framework
 
@@ -161,6 +164,9 @@ Kubernetes: `>= 1.30.0-0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| auth.hf_token.enabled | bool | `true` |  |
+| auth.hf_token.secretKey | string | `"HF_TOKEN"` |  |
+| auth.hf_token.secretName | string | `"llm-d-hf-token"` |  |
 | clusterDomain | string | `"cluster.local"` | Default Kubernetes cluster domain |
 | common | object | `{}` | Parameters for bitnami.common dependency |
 | commonAnnotations | object | `{}` | Annotations to add to all deployed objects |
