@@ -12,7 +12,7 @@ NAMESPACE="llm-d"
 just start-bench $NAMESPACE
 ```
 
-### 2. Get the address of a particular pod or the gateway
+### 2. Get the address of the gateway
 
 - The gateway is at (`http://gaie-pd-ip-bb618139.${NAMESPACE}.svc.cluster.local:8000`)
 
