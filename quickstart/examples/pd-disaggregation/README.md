@@ -2,7 +2,7 @@
 
 ## Overview 
 
-- This example demonstrates how to deploy vLLM with P/D disaggregation using Llama-70B with example best practics.
+- This example demonstrates how to deploy Llama-70B using vLLM's P/D disaggregation support with NIXL.
 - This "path" has been validated on an 8xH200 cluster with infiniband networking.
 
 > WARNING: We are still investigating and optimizing performance for other hardware and networing clusters.
@@ -45,7 +45,7 @@ export HF_TOKEN=$(YOUR_TOKEN)
 helmfile --selector managedBy=helmfile apply helmfile.yaml
 ```
 
-- We can see that the helm charts were deployed:
+We can see that the helm charts were deployed:
 
 ```bash
 robertgshaw@Roberts-MacBook-Pro benchmark-pod % helm list
@@ -56,7 +56,7 @@ robertgshaw@Roberts-MacBook-Pro benchmark-pod % helm list
 >> ms-pd           llm-d           3               2025-07-14 23:10:19.542269 -0400 EDT    deployed        llm-d-modelservice-0.0.10       0.0.1 
 ```
 
-- We can see that 4 prefill replicas were created and 1 decode replia was created:
+We can see that 4 prefill replicas were created and 1 decode replica was created:
 
 ```bash
 kubectl get pods
@@ -69,4 +69,6 @@ kubectl get pods
 >> ms-pd-llm-d-modelservice-prefill-5cbb8c6dcc-82b4g   1/1     Running   0          3m21s
 >> ms-pd-llm-d-modelservice-prefill-5cbb8c6dcc-mvnmh   1/1     Running   0          3m41s
 ```
+
+
 
