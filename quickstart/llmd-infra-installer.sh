@@ -14,6 +14,8 @@ PROXY_UID=""
 VALUES_FILE="values.yaml"
 DEBUG=""
 KUBERNETES_CONTEXT=""
+SKIP_INFRA=false
+INFRA_ONLY=false
 DISABLE_METRICS=false
 MONITORING_NAMESPACE="llm-d-monitoring"
 GATEWAY_TYPE="istio"
@@ -35,6 +37,8 @@ Options:
   -f, --values-file PATH           Path to Helm values.yaml file (default: values.yaml)
   -u, --uninstall                  Uninstall the llm-d components from the current cluster
   -d, --debug                      Add debug mode to the helm install
+  -i, --skip-infra)                 SKIP_INFRA=true; shift;;
+  -e, --infra-only)                 INFRA_ONLY=true; shift;;
   -m, --disable-metrics-collection Disable metrics collection (Prometheus will not be installed)
   -k, --minikube                   Deploy on an existing minikube instance with hostPath storage
   -g, --context                    Supply a specific Kubernetes context
@@ -116,6 +120,8 @@ parse_args() {
       -f|--values-file)                VALUES_FILE="$2"; shift 2 ;;
       -u|--uninstall)                  ACTION="uninstall"; shift ;;
       -d|--debug)                      DEBUG="--debug"; shift;;
+      -i|--skip-infra)                 SKIP_INFRA=true; shift;;
+      -e|--infra-only)                 INFRA_ONLY=true; shift;;
       -m|--disable-metrics-collection) DISABLE_METRICS=true; shift;;
       -k|--minikube)                   USE_MINIKUBE=true; shift ;;
       -g|--context)                    KUBERNETES_CONTEXT="$2"; shift 2 ;;
@@ -217,9 +223,16 @@ validate_gateway_type() {
 }
 
 install() {
-  log_info "🏗️ Installing GAIE Kubernetes infrastructure…"
-  bash ../chart-dependencies/ci-deps.sh apply ${GATEWAY_TYPE}
-  log_success "GAIE infra applied"
+  if [[ "${SKIP_INFRA}" == "false" ]]; then
+    log_info "🏗️ Installing GAIE Kubernetes infrastructure…"
+    bash ../chart-dependencies/ci-deps.sh apply ${GATEWAY_TYPE}
+    log_success "GAIE infra applied"
+  fi
+
+  if [[ "${INFRA_ONLY}" == "true" ]]; then
+    log_info "Option \"-e/--infra-only\" specified, will end execution"
+    return 0
+  fi
 
   if $KCMD get namespace "${MONITORING_NAMESPACE}" &>/dev/null; then
     log_info "🧹 Cleaning up existing monitoring namespace..."
@@ -301,8 +314,10 @@ install() {
 }
 
 uninstall() {
-  log_info "🗑️ Tearing down GAIE Kubernetes infrastructure…"
-  bash ../chart-dependencies/ci-deps.sh delete ${GATEWAY_TYPE}
+  if [[ "${SKIP_INFRA}" == "false" ]]; then
+    log_info "🗑️ Tearing down GAIE Kubernetes infrastructure…"
+    bash ../chart-dependencies/ci-deps.sh delete ${GATEWAY_TYPE}
+  fi
 
   log_info "🗑️ Uninstalling llm-d chart..."
   $HCMD uninstall ${HELM_RELEASE_NAME} --ignore-not-found --namespace "${NAMESPACE}" || true
