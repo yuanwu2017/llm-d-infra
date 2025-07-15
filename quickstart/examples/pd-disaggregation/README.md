@@ -45,9 +45,28 @@ export HF_TOKEN=$(YOUR_TOKEN)
 helmfile --selector managedBy=helmfile apply helmfile.yaml
 ```
 
+- We can see that the helm charts were deployed:
+
+```bash
+robertgshaw@Roberts-MacBook-Pro benchmark-pod % helm list
+
+>> NAME            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                           APP VERSION
+>> gaie-pd         llm-d           1               2025-07-14 22:45:05.965698 -0400 EDT    deployed        inferencepool-v0.4.0            v0.4.0     
+>> infra-pd        llm-d           1               2025-07-14 22:44:37.411622 -0400 EDT    deployed        llm-d-infra-1.0.2               0.1        
+>> ms-pd           llm-d           3               2025-07-14 23:10:19.542269 -0400 EDT    deployed        llm-d-modelservice-0.0.10       0.0.1 
+```
+
+- We can see that 4 prefill replicas were created and 1 decode replia was created:
+
 ```bash
 kubectl get pods
 
-
+>> NAME                                                READY   STATUS    RESTARTS   AGE
+>> gaie-pd-epp-55c5455dc5-jqh9r                        1/1     Running   0          28m
+>> ms-pd-llm-d-modelservice-decode-8648644895-fz4bm    2/2     Running   0          28m
+>> ms-pd-llm-d-modelservice-prefill-5cbb8c6dcc-48qg7   1/1     Running   0          3m19s
+>> ms-pd-llm-d-modelservice-prefill-5cbb8c6dcc-7gfbs   1/1     Running   0          3m41s
+>> ms-pd-llm-d-modelservice-prefill-5cbb8c6dcc-82b4g   1/1     Running   0          3m21s
+>> ms-pd-llm-d-modelservice-prefill-5cbb8c6dcc-mvnmh   1/1     Running   0          3m41s
 ```
 
