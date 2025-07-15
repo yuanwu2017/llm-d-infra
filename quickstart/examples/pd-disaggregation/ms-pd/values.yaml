@@ -1,13 +1,12 @@
-# This values.yaml file creates the resources for facebook/opt-125m
 multinode: false
 
 modelArtifacts:
-  uri: "hf://Qwen/Qwen3-0.6B"
-  size: 20Gi
+  uri: "hf://RedHatAI/Llama-3.3-70B-Instruct-FP8-dynamic"
+  size: 100Gi
   authSecretName: "llm-d-hf-token"
 
 routing:
-  modelName: Qwen/Qwen3-0.6B
+  modelName: RedHatAI/Llama-3.3-70B-Instruct-FP8-dynamic
   servicePort: 8000
   parentRefs:
     - group: gateway.networking.k8s.io
@@ -32,35 +31,35 @@ decode:
   replicas: 1
   containers:
   - name: "vllm"
-    image: "ghcr.io/llm-d/llm-d:0.0.8"
+    image: "robertgouldshaw2/vllm-nixl:nixl-oh-debug-fixed-0.3"
     modelCommand: vllmServe
     args:
-      - "--enforce-eager"
+      - "--tensor-parallel-size"
+      - "4"
+      - "--block-size"
+      - "128"
       - "--kv-transfer-config"
       - '{"kv_connector":"NixlConnector", "kv_role":"kv_both"}'
+      - "--disable-log-requests"
+      - "--disable-uvicorn-access-log"
+      - "--max-model-len"
+      - "32000"
     env:
-      - name: CUDA_VISIBLE_DEVICES
-        value: "0"
-      - name: UCX_TLS
-        value: "cuda_ipc,cuda_copy,tcp"
       - name: VLLM_NIXL_SIDE_CHANNEL_HOST
         valueFrom:
           fieldRef:
             fieldPath: status.podIP
-      - name: VLLM_NIXL_SIDE_CHANNEL_PORT
-        value: "5557"
-      - name: VLLM_LOGGING_LEVEL
-        value: DEBUG
-    ports:
-      - containerPort: 5557
-        protocol: TCP
     resources:
       limits:
-        memory: 16Gi
-        nvidia.com/gpu: "1"
+        memory: 64Gi
+        cpu: "16"
+        nvidia.com/gpu: "4"
+        rdma/ib: 1
       requests:
-        memory: 16Gi
-        nvidia.com/gpu: "1"
+        memory: 64Gi
+        cpu: "16"
+        nvidia.com/gpu: "4"
+        rdma/ib: 1
     mountModelVolume: true
     volumeMounts:
     - name: metrics-volume
@@ -75,25 +74,25 @@ decode:
       medium: Memory
       sizeLimit: "16Gi"
 
-# Prefill pod configuration
 prefill:
   create: true
   replicas: 1
   containers:
   - name: "vllm"
-    image: "ghcr.io/llm-d/llm-d:0.0.8"
+    image: "robertgouldshaw2/vllm-nixl:nixl-oh-debug-fixed-0.3"
     modelCommand: vllmServe
     args:
-      - "--enforce-eager"
+      - "--block-size"
+      - "128"
       - "--kv-transfer-config"
       - '{"kv_connector":"NixlConnector", "kv_role":"kv_both"}'
+      - "--disable-log-requests"
+      - "--disable-uvicorn-access-log"
+      - "--max-model-len"
+      - "32000"
     env:
-      - name: CUDA_VISIBLE_DEVICES
-        value: "0"
-      - name: UCX_TLS
-        value: "cuda_ipc,cuda_copy,tcp"
-      - name: VLLM_NIXL_SIDE_CHANNEL_PORT
-        value: "5557"
+      - name: VLLM_IS_PREFILL
+        value: "1"
       - name: VLLM_NIXL_SIDE_CHANNEL_HOST
         valueFrom:
           fieldRef:
@@ -108,10 +107,14 @@ prefill:
     resources:
       limits:
         memory: 16Gi
+        cpu: "16"
         nvidia.com/gpu: "1"
+        rdma/ib: 1
       requests:
         memory: 16Gi
+        cpu: "16"
         nvidia.com/gpu: "1"
+        rdma/ib: 1
     mountModelVolume: true
     volumeMounts:
     - name: metrics-volume

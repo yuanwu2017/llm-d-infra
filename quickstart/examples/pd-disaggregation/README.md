@@ -1,11 +1,13 @@
-# quickstart for facebook-opt-125m
+# Example Deployment P/D Disaggregation
 
 ## Installation
 
 1. Install the dependencies
+
 2. Use the quickstart to deploy Gateway CRDS + Gateway provider + Infra chart:
 ```bash
-HF_TOKEN=$(HFTOKEN) ./llmd-infra-installer.sh --namespace llm-d -r infra-pd -j kgateway
+export HF_TOKEN=$(SET_YOUR_TOKEN)
+./llmd-infra-installer.sh --namespace llm-d -r infra-pd -j kgateway --disable-metrics-collection
 ```
 
 3. Use the helmfile to apply the modelservice and GIE charts ontop of it
