@@ -2,10 +2,10 @@
 
 ## Overview 
 
-- This example demonstrates how to deploy Llama-70B using vLLM's P/D disaggregation support with NIXL.
-- This "path" has been validated on an 8xH200 cluster with infiniband networking.
+- This example demonstrates how to deploy Llama-70B using vLLM's P/D disaggregation support with NIXL
+- This "path" has been validated on an 8xH200 cluster with infiniband networking
 
-> WARNING: We are still investigating and optimizing performance for other hardware and networking configurations.
+> WARNING: We are still investigating and optimizing performance for other hardware and networking configurations
 
 In this example, we will demonstrate a deployment of `Llama-3.3-70B-Instruct-Fp8` with:
 - 4 TP=1 Prefill Workers
@@ -14,7 +14,7 @@ In this example, we will demonstrate a deployment of `Llama-3.3-70B-Instruct-Fp8
 ## P/D Best Practices
 
 P/D disaggregation can benefit overall throughput by:
-- Specializing P and D workers for compute-bound vs latency-bound tasks
+- Specializing P and D workers for compute-bound vs latency-bound workloads
 - Reducing the number of copies of the model (increasing KV cache RAM) with wide parallelism
 
 However, P/D disaggregation is not a target for all workloads. We suggest exploring P/D disaggregation for workloads with:
