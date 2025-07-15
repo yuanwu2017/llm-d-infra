@@ -1,4 +1,4 @@
-# Use this Justfile within the cluster.
+# Run these on the cluster
 
 eval MODEL URL:
     lm_eval --model local-completions --tasks gsm8k \
