@@ -31,7 +31,7 @@ decode:
   replicas: 1
   containers:
   - name: "vllm"
-    image: "robertgouldshaw2/vllm-nixl:nixl-oh-debug-fixed-0.3"
+    image: "robertgouldshaw2/vllm-nixl:nixl-oh-debug-fixed-0.3" # TODO(rob): update to llm-d image
     modelCommand: vllmServe
     args:
       - "--tensor-parallel-size"
@@ -51,12 +51,12 @@ decode:
             fieldPath: status.podIP
     resources:
       limits:
-        memory: 64Gi
+        memory: 128Gi
         cpu: "16"
         nvidia.com/gpu: "4"
         rdma/ib: 1
       requests:
-        memory: 64Gi
+        memory: 128Gi
         cpu: "16"
         nvidia.com/gpu: "4"
         rdma/ib: 1
@@ -76,10 +76,10 @@ decode:
 
 prefill:
   create: true
-  replicas: 1
+  replicas: 4
   containers:
   - name: "vllm"
-    image: "robertgouldshaw2/vllm-nixl:nixl-oh-debug-fixed-0.3"
+    image: "robertgouldshaw2/vllm-nixl:nixl-oh-debug-fixed-0.3" # TODO(rob): update to llm-d image
     modelCommand: vllmServe
     args:
       - "--block-size"
@@ -91,28 +91,21 @@ prefill:
       - "--max-model-len"
       - "32000"
     env:
-      - name: VLLM_IS_PREFILL
+      - name: VLLM_IS_PREFILL # TODO(rob): remove once we bump vllm version
         value: "1"
       - name: VLLM_NIXL_SIDE_CHANNEL_HOST
         valueFrom:
           fieldRef:
             fieldPath: status.podIP
-      - name: VLLM_LOGGING_LEVEL
-        value: DEBUG
-    ports:
-      - containerPort: 8000
-        protocol: TCP
-      - containerPort: 5557
-        protocol: TCP
     resources:
       limits:
-        memory: 16Gi
-        cpu: "16"
+        memory: 32Gi
+        cpu: "8"
         nvidia.com/gpu: "1"
         rdma/ib: 1
       requests:
-        memory: 16Gi
-        cpu: "16"
+        memory: 32Gi
+        cpu: "8"
         nvidia.com/gpu: "1"
         rdma/ib: 1
     mountModelVolume: true
