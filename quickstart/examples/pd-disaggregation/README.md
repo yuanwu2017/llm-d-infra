@@ -5,9 +5,9 @@
 - This example demonstrates how to deploy Llama-70B using vLLM's P/D disaggregation support with NIXL.
 - This "path" has been validated on an 8xH200 cluster with infiniband networking.
 
-> WARNING: We are still investigating and optimizing performance for other hardware and networing clusters.
+> WARNING: We are still investigating and optimizing performance for other hardware and networking configurations.
 
-In this example, we will demonstrate a deplyment of `Llama-3.3-70B-Instruct-Fp8` with:
+In this example, we will demonstrate a deployment of `Llama-3.3-70B-Instruct-Fp8` with:
 - 4 TP=1 Prefill Workers
 - 1 TP=4 Decode Worker
 
@@ -15,14 +15,14 @@ In this example, we will demonstrate a deplyment of `Llama-3.3-70B-Instruct-Fp8`
 
 P/D disaggregation can benefit overall throughput by:
 - Specializing P and D workers for compute-bound vs latency-bound tasks
-- Reducing the number of copies of the model in the cluster for decode (increasing KV cache RAM)
+- Reducing the number of copies of the model (increasing KV cache RAM) with wide parallelism
 
-However, P/D disaggregation is not a target for all workloads. We suggest exploring P/D disaggregation for:
+However, P/D disaggregation is not a target for all workloads. We suggest exploring P/D disaggregation for workloads with:
 - Large models (e.g. Llama-70B+, not Llama-8B)
 - Longer input sequence lengths (e.g 10k ISL | 1k OSL, not 200 ISL | 200 OSL)
-- Large MoE models with opportunities for wide-EP
+- Sparse MoE architectures with opportunities for wide-EP
 
-As a result, as you tune you P/D deployments, we suggest tuning the following parameters: 
+As a result, as you tune you P/D deployments, we suggest focusing on the following parameters:
 - **Heterogenous Parallelism**: deploy P workers with less parallelism and more replicas and D workers with more parallelism and fewer replicas
 - **xPyD Ratios**: tuning the ratio of P workers to D workers to ensure balance for your ISL|OSL ratio
 
@@ -45,7 +45,7 @@ export HF_TOKEN=$(YOUR_TOKEN)
 helmfile --selector managedBy=helmfile apply helmfile.yaml
 ```
 
-We can see that the helm charts were deployed:
+We can see that the charts were deployed:
 
 ```bash
 robertgshaw@Roberts-MacBook-Pro benchmark-pod % helm list
@@ -69,6 +69,3 @@ kubectl get pods
 >> ms-pd-llm-d-modelservice-prefill-5cbb8c6dcc-82b4g   1/1     Running   0          3m21s
 >> ms-pd-llm-d-modelservice-prefill-5cbb8c6dcc-mvnmh   1/1     Running   0          3m41s
 ```
-
-
-
