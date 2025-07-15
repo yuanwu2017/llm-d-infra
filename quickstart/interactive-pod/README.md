@@ -2,7 +2,7 @@
 
 This example shows some utilities for interacting with a running `llm-d` deployment.
 
-> WARNING: this assumes you have an active cluster running.
+> WARNING: this example assumes you have an `llm-d` deployment running
 
 ### 1. Create the interactive pod
 
