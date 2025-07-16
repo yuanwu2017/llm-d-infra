@@ -79,7 +79,7 @@ check_dependencies() {
     die "Detected yq is not mikefarah’s yq. Please install the required yq from https://github.com/mikefarah/yq?tab=readme-ov-file#install"
   fi
 
-  local required_cmds=(git yq jq helm helmfile kubectl kustomize make)
+  local required_cmds=(git yq jq helm helmfile kubectl kustomize)
   for cmd in "${required_cmds[@]}"; do
     check_cmd "$cmd"
   done
