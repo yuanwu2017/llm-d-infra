@@ -70,12 +70,13 @@ gateway:
   annotations: {}
 
   # Special parameters applied to kGateway via GatewayParameters resource
-  kGatewayParameters:
+  gatewayParameters:
     # @schema
     # type: [number, boolean]
     # @schema
     proxyUID: false
 
+    enabled: true
   # @schema
   # items:
   #  type: object
