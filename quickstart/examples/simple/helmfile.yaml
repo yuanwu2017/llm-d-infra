@@ -26,11 +26,11 @@ releases:
   - name: gaie-simple
     namespace: llm-d
     chart: oci://us-central1-docker.pkg.dev/k8s-staging-images/gateway-api-inference-extension/charts/inferencepool
-    version: v0
+    version: v0.4.0
     installed: true
     needs:
       - llm-d/infra-simple
     values:
       - gaie-simple/values.yaml
     labels:
-      managedBy: helmfile 
+      managedBy: helmfile
