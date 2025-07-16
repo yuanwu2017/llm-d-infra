@@ -305,7 +305,7 @@ install() {
     "${VALUES_ARGS[@]}" \
     "${OCP_DISABLE_INGRESS_ARGS[@]+"${OCP_DISABLE_INGRESS_ARGS[@]}"}" \
     --set gateway.gatewayClassName="${GATEWAY_TYPE}" \
-    --set gateway.kGatewayParameters.proxyUID="${PROXY_UID}" \
+    --set gateway.gatewayParameters.proxyUID="${PROXY_UID}" \
     --set ingress.clusterRouterBase="${BASE_OCP_DOMAIN}" \
     "${MODEL_OVERRIDE_ARGS[@]+"${MODEL_OVERRIDE_ARGS[@]}"}"
   log_success "$HELM_RELEASE_NAME deployed"
