@@ -35,4 +35,4 @@ inferencePool:
   modelServers:
     matchLabels:
       llm-d.ai/inferenceServing: "true"
-      # llm-d.ai/model: ms-facebook-llm-d-modelservice
+      # llm-d.ai/model: ms-simple-llm-d-modelservice
