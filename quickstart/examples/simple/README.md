@@ -20,7 +20,7 @@ HF_TOKEN=$(HFTOKEN) ./llmd-infra-installer.sh --namespace llm-d -r infra-simple 
 
 ```bash
 cd examples/simple
-helmfile --selector managedBy=helmfile apply helmfile.yaml
+helmfile --selector managedBy=helmfile apply helmfile.yaml --skip-diff-on-install
 ```
 
 ## Verify the Installation

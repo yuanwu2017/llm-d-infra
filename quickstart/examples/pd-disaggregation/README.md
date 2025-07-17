@@ -1,6 +1,6 @@
 # P/D Disaggregation "Well Lit" Path
 
-## Overview 
+## Overview
 
 - This example demonstrates how to deploy Llama-70B using vLLM's P/D disaggregation support with NIXL
 - This "path" has been validated on an 8xH200 cluster with infiniband networking
@@ -42,7 +42,7 @@ export HF_TOKEN=$(YOUR_TOKEN)
 
 3. Use the helmfile to apply the modelservice and GIE charts on top of it
 ```bash
-helmfile --selector managedBy=helmfile apply helmfile.yaml
+helmfile --selector managedBy=helmfile apply helmfile.yaml --skip-diff-on-install
 ```
 
 We can see that the charts were deployed:
@@ -51,9 +51,9 @@ We can see that the charts were deployed:
 robertgshaw@Roberts-MacBook-Pro benchmark-pod % helm list
 
 >> NAME            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                           APP VERSION
->> gaie-pd         llm-d           1               2025-07-14 22:45:05.965698 -0400 EDT    deployed        inferencepool-v0.4.0            v0.4.0     
->> infra-pd        llm-d           1               2025-07-14 22:44:37.411622 -0400 EDT    deployed        llm-d-infra-1.0.2               0.1        
->> ms-pd           llm-d           3               2025-07-14 23:10:19.542269 -0400 EDT    deployed        llm-d-modelservice-0.0.10       0.0.1 
+>> gaie-pd         llm-d           1               2025-07-14 22:45:05.965698 -0400 EDT    deployed        inferencepool-v0.4.0            v0.4.0
+>> infra-pd        llm-d           1               2025-07-14 22:44:37.411622 -0400 EDT    deployed        llm-d-infra-1.0.2               0.1
+>> ms-pd           llm-d           3               2025-07-14 23:10:19.542269 -0400 EDT    deployed        llm-d-modelservice-0.0.10       0.0.1
 ```
 
 We can see that 4 prefill replicas were created and 1 decode replica was created:
