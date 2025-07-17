@@ -12,7 +12,7 @@ This is a simple example that demonstrates how to deploy using the llm-d-infra s
 ```bash
 # From the repo root
 cd quickstart
-HF_TOKEN=$(HFTOKEN) ./llmd-infra-installer.sh --namespace llm-d -r infra-simple
+HF_TOKEN=$(HFTOKEN) ./llmd-infra-installer.sh --namespace llm-d -r infra-simple --gateway kgateway
 ```
     - It should be noted release name `infra-simple` is important here, because it matches up with pre-built values files used in this example.
 
