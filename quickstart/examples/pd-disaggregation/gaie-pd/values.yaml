@@ -7,8 +7,8 @@ inferenceExtension:
     tag: 0.0.5
     pullPolicy: Always
   extProcPort: 9002
-  pluginConfigFile: "dp-config.yaml"
-  pluginCustomConfig:
+  pluginsConfigFile: "dp-config.yaml"
+  pluginsCustomConfig:
     dp-config.yaml: |
       apiVersion: inference.networking.x-k8s.io/v1alpha1
       kind: EndpointPickerConfig

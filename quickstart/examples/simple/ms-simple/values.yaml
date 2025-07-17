@@ -15,7 +15,7 @@ routing:
       name: infra-simple-inference-gateway
 
   inferenceModel:
-    create: true
+    create: false
 
   inferencePool:
     create: false
@@ -63,8 +63,12 @@ decode:
     volumeMounts:
     - name: metrics-volume
       mountPath: /.config
+    - name: torch-compile-cache
+      mountPath: /.cache
   volumes:
   - name: metrics-volume
+    emptyDir: {}
+  - name: torch-compile-cache
     emptyDir: {}
 
 # The prefill replica is disabled via 'create: false' since pd is not
@@ -107,6 +111,10 @@ prefill:
     volumeMounts:
     - name: metrics-volume
       mountPath: /.config
+    - name: torch-compile-cache
+      mountPath: /.cache
   volumes:
   - name: metrics-volume
+    emptyDir: {}
+  - name: torch-compile-cache
     emptyDir: {}

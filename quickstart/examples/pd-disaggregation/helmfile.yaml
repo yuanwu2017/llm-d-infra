@@ -11,18 +11,6 @@ releases:
     labels:
       managedBy: llm-d-infra-installer
 
-  - name: ms-pd
-    namespace: llm-d
-    chart: llm-d-modelservice/llm-d-modelservice
-    version: 0.0.10
-    installed: true
-    needs:
-      - llm-d/infra-pd
-    values:
-      - ms-pd/values.yaml
-    labels:
-      managedBy: helmfile
-
   - name: gaie-pd
     namespace: llm-d
     chart: oci://us-central1-docker.pkg.dev/k8s-staging-images/gateway-api-inference-extension/charts/inferencepool
@@ -33,5 +21,18 @@ releases:
       - llm-d/infra-pd
     values:
       - gaie-pd/values.yaml
+    labels:
+      managedBy: helmfile
+
+  - name: ms-pd
+    namespace: llm-d
+    chart: llm-d-modelservice/llm-d-modelservice
+    version: 0.0.11
+    installed: true
+    needs:
+      - llm-d/infra-pd
+      - llm-d/gaie-pd
+    values:
+      - ms-pd/values.yaml
     labels:
       managedBy: helmfile
