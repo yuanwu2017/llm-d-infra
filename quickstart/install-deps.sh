@@ -83,8 +83,10 @@ if ! command -v helm &> /dev/null; then
   rm -rf "${OS}-${ARCH}" "${TARBALL}"
 fi
 
-# Install Helmfile
+# Install the helm diff plugin used by helmfile
+helm plugin install https://github.com/databus23/helm-diff
 
+# Install helmfile
 if ! command -v helmfile &> /dev/null; then
   echo "📦 helmfile not found. Installing..."
   HELMFILE_VERSION="v0.162.0"
