@@ -14,7 +14,7 @@ routing:
       name: infra-pd-inference-gateway
 
   inferenceModel:
-    create: true
+    create: false
 
   inferencePool:
     create: false
@@ -64,8 +64,10 @@ decode:
     volumeMounts:
     - name: metrics-volume
       mountPath: /.config
-    - mountPath: /dev/shm
-      name: shm
+    - name: shm
+      mountPath: /dev/shm
+    - name: torch-compile-cache
+      mountPath: /.cache
   volumes:
   - name: metrics-volume
     emptyDir: {}
@@ -73,6 +75,8 @@ decode:
     emptyDir:
       medium: Memory
       sizeLimit: "16Gi"
+  - name: torch-compile-cache
+    emptyDir: {}
 
 prefill:
   create: true
@@ -112,8 +116,10 @@ prefill:
     volumeMounts:
     - name: metrics-volume
       mountPath: /.config
-    - mountPath: /dev/shm
-      name: shm
+    - name: shm
+      mountPath: /dev/shm
+    - name: torch-compile-cache
+      mountPath: /.cache
   volumes:
   - name: metrics-volume
     emptyDir: {}
@@ -121,3 +127,5 @@ prefill:
     emptyDir:
       medium: Memory
       sizeLimit: "16Gi"
+  - name: torch-compile-cache
+    emptyDir: {}
