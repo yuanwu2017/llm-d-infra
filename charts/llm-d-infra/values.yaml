@@ -61,7 +61,7 @@ gateway:
 
   # -- Gateway class that determines the backend used
   # Currently supported values: "kgateway" or "istio"
-  gatewayClassName: istio
+  gatewayClassName: kgateway
 
   # @schema
   # additionalProperties: true
