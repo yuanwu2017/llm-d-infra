@@ -9,7 +9,7 @@ CC_MULT=10
 for CONCURRENCY in "${CONCURRENCIES[@]}";
 do
     NUM_PROMPTS=$(($CONCURRENCY * $CC_MULT))
-    
+
     echo ""
     echo "===== RUNNING $MODEL FOR $NUM_PROMPTS PROMPTS WITH CONCURRENCY $CONCURRENCY ====="
     echo ""
