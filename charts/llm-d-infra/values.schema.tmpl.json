@@ -102,7 +102,7 @@
           "title": "fullnameOverride"
         },
         "gatewayClassName": {
-          "default": "istio",
+          "default": "kgateway",
           "description": "Gateway class that determines the backend used Currently supported values: \"kgateway\" or \"istio\"",
           "required": [],
           "title": "gatewayClassName"
