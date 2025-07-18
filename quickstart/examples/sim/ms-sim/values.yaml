@@ -23,24 +23,6 @@ routing:
 
   httpRoute:
     create: true
-    matches:
-    - path:
-        type: PathPrefix
-        value: /v1/completions
-      headers:
-      - name: x-model-name
-        type: Exact
-        value: random
-    - path:
-        type: PathPrefix
-        value: /v1/chat/completions
-      headers:
-      - name: x-model-name
-        type: Exact
-        value: random
-    - path:
-        type: PathPrefix
-        value: /v1/models
 
   epp:
     # use GAIE instead of EPP
