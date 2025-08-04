@@ -1,3 +1,5 @@
+# PD Disaggregation on GKE
+
 ## Installation
 
 1. Install your local dependencies (from `/llm-d-infra/quickstart`)
@@ -7,7 +9,6 @@
     ```
 
 1. Use the quickstart to deploy Gateway CRDS + Gateway provider + Infra chart (from `/llm-d-infra/quickstart`).
-
 
     ```bash
     # Set common environment variables
@@ -24,8 +25,8 @@
 
 1. Use the helmfile to apply the modelservice and GIE charts on top of it.
 
-   * `--set provider.name=gke`: Sets the gaie gateway provider to `gke` so the chart will install GKE gateway related resources (`gcpbackendpolicy` and `healthcheckpolicy`).
-   * `--set 'decode.containers[0].resources.limits.rdma/ib=null'`: The example runs on GCP H200 instances which don't the `rdma/ib` resources out of the box.
+   - `--set provider.name=gke`: Sets the gaie gateway provider to `gke` so the chart will install GKE gateway related resources (`gcpbackendpolicy` and `healthcheckpolicy`).
+   - `--set 'decode.containers[0].resources.limits.rdma/ib=null'`: The example runs on GCP H200 instances which don't the `rdma/ib` resources out of the box.
 
     ```bash
     cd examples/pd-disaggregation
@@ -150,6 +151,7 @@
 ## Cleanup
 
 To remove the deployment:
+
 ```bash
 # Remove the model services
 helmfile --selector managedBy=helmfile destroy --namespace ${NAMESPACE}
