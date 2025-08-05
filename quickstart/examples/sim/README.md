@@ -46,7 +46,7 @@ helmfile --selector managedBy=helmfile apply -f helmfile.yaml --skip-diff-on-ins
 
    Note: if you chose to use `istio` as your Gateway provider you would  see those (`istiod` and `istio-base` in the `istio-system` namespace)  instead of the kgateway based ones.
 
-2. Find the gateway service:
+1. Find the gateway service:
 
    ```console
    $ kubectl get services -n llm-d-sim
@@ -57,13 +57,13 @@ helmfile --selector managedBy=helmfile apply -f helmfile.yaml --skip-diff-on-ins
 
    In this case we have found that our gateway service is called `infra-sim-inference-gateway`.
 
-3. `port-forward` the service to we can curl it:
+1. `port-forward` the service to we can curl it:
 
    ```bash
    kubectl port-forward -n llm-d-sim service/infra-sim-inference-gateway 8000:80
    ```
 
-4. Try curling the `/v1/models` endpoint:
+1. Try curling the `/v1/models` endpoint:
 
    ```bash
    curl -s <http://localhost:8000/v1/models> \
@@ -94,7 +94,7 @@ helmfile --selector managedBy=helmfile apply -f helmfile.yaml --skip-diff-on-ins
    }
    ```
 
-5. Try curling the `v1/chat/completions` endpoint:
+1. Try curling the `v1/chat/completions` endpoint:
 
    ```bash
    curl -X POST <http://localhost:8000/v1/completions> \
