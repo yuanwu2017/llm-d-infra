@@ -1,0 +1,22 @@
+repositories:
+- name: llm-d-modelservice
+  url: oci://ghcr.io/llm-d/charts
+
+releases:
+- name: ms-xpu
+  chart: llm-d-modelservice/llm-d-modelservice
+  version: "0.2.0"
+  values:
+  - values.yaml
+  labels:
+    managedBy: helmfile
+    example: intel-xpu
+  hooks:
+  - events: ["presync"]
+    showlogs: true
+    command: "bash"
+    args:
+    - "-c"
+    - |
+      echo "Deploying Intel XPU model service..."
+      echo "Ensuring XPU resources are available..."

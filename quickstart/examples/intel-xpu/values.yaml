@@ -1,0 +1,114 @@
+# Intel XPU specific model service configuration
+
+modelArtifacts:
+  name: microsoft/DialoGPT-medium
+  uri: "hf://microsoft/DialoGPT-medium"
+  size: 20Gi
+
+# Configure for Intel XPU
+accelerator:
+  type: intel
+  resources:
+    intel: "gpu.intel.com/i915"
+  env:
+    intel:
+      - name: ZE_AFFINITY_MASK
+        value: "0"
+      # Intel XPU specific environment variables
+      - name: TORCH_LLM_ALLREDUCE
+        value: "1"
+      - name: CCL_ZE_IPC_EXCHANGE
+        value: "pidfd"
+      - name: VLLM_ALLOW_LONG_MAX_MODEL_LEN
+        value: "1"
+      - name: VLLM_WORKER_MULTIPROC_METHOD
+        value: "spawn"
+      # vLLM specific environment variables for XPU
+      - name: VLLM_LOGGING_LEVEL
+        value: "DEBUG"
+      - name: VLLM_USE_V1
+        value: "1"
+      # Proxy configuration for external network access
+      - name: HTTP_PROXY
+        value: "http://proxy-dmz.intel.com:912"
+      - name: HTTPS_PROXY
+        value: "http://proxy-dmz.intel.com:912"
+      - name: http_proxy
+        value: "http://proxy-dmz.intel.com:912"
+      - name: https_proxy
+        value: "http://proxy-dmz.intel.com:912"
+      - name: NO_PROXY
+        value: ".intel.com,intel.com,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+      - name: no_proxy
+        value: ".intel.com,intel.com,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+
+routing:
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: infra-xpu-inference-gateway
+    namespace: "{{ .Release.Namespace }}"
+
+decode:
+  create: true
+  replicas: 1
+  containers:
+  - name: "vllm"
+    image: "intel/llm-scaler-vllm:latest"
+    modelCommand: custom
+    command:
+      - "python3"
+    args:
+      - "-m"
+      - "vllm.entrypoints.openai.api_server"
+      - "--model"
+      - "microsoft/DialoGPT-medium"
+      - "--device"
+      - "xpu"
+      - "--enforce-eager"
+      - "--dtype"
+      - "float16"
+      - "--trust-remote-code"
+      - "--disable-sliding-window"
+      - "--gpu-memory-util=0.9"
+      - "--no-enable-prefix-caching"
+      - "--max-num-batched-tokens=8192"
+      - "--disable-log-requests"
+      - "--max-model-len=8192"
+      - "--block-size"
+      - "64"
+      - "--quantization"
+      - "fp8"
+      - "-tp=1"
+      - "--port"
+      - "8200"
+    resources:
+      limits:
+        memory: 32Gi
+        cpu: "8"
+        gpu.intel.com/i915: "1"
+      requests:
+        cpu: "4"
+        memory: 16Gi
+        gpu.intel.com/i915: "1"
+    mountModelVolume: true
+  
+  volumes:
+    - name: shm
+      emptyDir:
+        medium: Memory
+        sizeLimit: "32Gi"
+  
+  volumeMounts:
+    - name: shm
+      mountPath: /dev/shm
+
+  acceleratorTypes:
+    labelKey: "accelerator"
+    labelValues:
+      - "intel-xpu"
+
+prefill:
+  create: false
+
+multinode: false
