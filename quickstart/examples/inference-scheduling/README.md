@@ -55,7 +55,7 @@ This profile defaults to the approximate prefix cache aware scorer, which only o
 
     In this case we have found that our gateway service is called `infra-inference-scheduling-inference-gateway`.
 
-1. `port-forward` the service to we can curl it:
+1. `port-forward` the service so we can curl it:
 
     ```bash
     kubectl port-forward -n llm-d-inference-scheduling service/infra-inference-scheduling-inference-gateway 8000:80
