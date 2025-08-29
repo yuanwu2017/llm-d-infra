@@ -16,9 +16,6 @@ environments:
 {{- $ns := .Namespace | default "llm-d-inference-scheduler" -}}
 {{- $rn := (env "RELEASE_NAME_POSTFIX") | default "inference-scheduling" -}}
 
-# set $ns as namespace for all releases
-namespace: {{ $ns }}
-
 repositories:
   - name: llm-d-modelservice
     url: https://llm-d-incubation.github.io/llm-d-modelservice/
@@ -39,7 +36,7 @@ releases:
         {{ .Environment.Values.gateway | toYaml | nindent 10 }}
       - gateway:
           destinationRule:
-            host: {{ printf "gaie-inference-scheduling-epp.%s.svc.cluster.local" $ns | quote }}
+            host: {{ printf "gaie-%s-epp.%s.svc.cluster.local" $rn $ns | quote }}
 
   - name: {{ printf "gaie-%s" $rn | quote }}
     namespace: {{ $ns }}
