@@ -18,22 +18,19 @@ routing:
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
-      name: infra-inference-scheduling-inference-gateway
+      name: infra-r1-inference-gateway
 
   proxy:
     image: ghcr.io/llm-d/llm-d-routing-sidecar:v0.2.0
     connector: nixlv2
     secure: false
-    # Match vLLM port with container port (both 8000)
-    vllmPort: 8000
-    port: 8000
 
   inferenceModel:
     create: false
 
   inferencePool:
     create: false
-    name: gaie-inference-scheduling
+    name: gaie-r1
 
   httpRoute:
     create: true
@@ -43,7 +40,7 @@ routing:
 
 decode:
   create: true
-  replicas: 1
+  replicas: 2
   monitoring:
     podmonitor:
       enabled: false
@@ -53,52 +50,22 @@ decode:
   containers:
   - name: "vllm"
     # Use Intel official vLLM image for XPU
-    image: "intel/vllm:0.10.0-xpu"
+    image: "ghcr.io/llm-d/llm-d-xpu:v0.2.0"
 
     # Use imageDefault to let chart handle vLLM parameters automatically  
     modelCommand: "imageDefault"
     
     # Override specific parameters to match successful docker run
-    modelArgs:
-      model: deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
-      dtype: float16
-      enforce-eager: true
-      port: 8000
-      block-size: 64
-      gpu-memory-util: 0.9
-      disable-prefix-caching: true
-      trust-remote-code: true
-      disable-sliding-window: true
-      disable-log-requests: true
-      max-num-batched-tokens: 8192
-      max-model-len: 4096
+    args:
+      - "--enforce-eager"
+      - "--dtype"
+      - "float16"
+      - "--disable-sliding-window"
 
     ports:
-      - containerPort: 8000
+      - containerPort: 8200
         protocol: TCP
-    
-    # Environment variables for proxy configuration and Intel XPU
-    env:
-      # Network proxy configuration for model downloading
-      - name: HTTP_PROXY
-        value: "http://proxy-dmz.intel.com:911"
-      - name: HTTPS_PROXY
-        value: "http://proxy-dmz.intel.com:912"
-      - name: http_proxy
-        value: "http://proxy-dmz.intel.com:911"
-      - name: https_proxy
-        value: "http://proxy-dmz.intel.com:912"
-      - name: NO_PROXY
-        value: "localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,.local,.intel.com"
-      - name: no_proxy
-        value: "localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,.local,.intel.com"
-      # Intel XPU configuration - simplified based on successful docker run
-      - name: ZE_AFFINITY_MASK
-        value: "3"
-      # Remove complex vLLM configuration that may cause issues
-      - name: VLLM_LOGGING_LEVEL
-        value: "INFO"
-    
+
     resources:
       limits:
         memory: 24Gi
@@ -111,27 +78,7 @@ decode:
 
     mountModelVolume: true
 
-    # Simplified security context - matching docker privileged mode
-    securityContext:
-      privileged: true
       
-    # Simplified device mounting to match successful docker run
-    extraVolumes:
-      - name: dev-dri
-        hostPath:
-          path: /dev/dri
-          type: Directory
-      - name: dev-dri-by-path  
-        hostPath:
-          path: /dev/dri/by-path
-          type: Directory
-
-    extraVolumeMounts:
-      - name: dev-dri
-        mountPath: /dev/dri
-      - name: dev-dri-by-path
-        mountPath: /dev/dri/by-path
-
   # XPU-specific node affinity
   acceleratorTypes:
     labelKey: "accelerator"
