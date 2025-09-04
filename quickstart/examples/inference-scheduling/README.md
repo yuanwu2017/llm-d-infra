@@ -60,11 +60,6 @@ To specify your gateway choice you can use the `-e <gateway option>` flag, ex:
 helmfile apply -e kgateway -n ${NAMESPACE}
 ```
 
-**For Intel XPU environments:**
-```bash
-helmfile apply -e xpu -n ${NAMESPACE}
-```
-
 To see what gateway options are supported refer to our [gateway control plane docs](../../gateway-control-plane-providers/README.md#supported-providers). Gateway configurations per provider are tracked in the [gateway-configurations directory](../common/gateway-configurations/).
 
 You can also customize your gateway, for more information on how to do that see our [gateway customization docs](../../docs/customizing-your-gateway.md).
