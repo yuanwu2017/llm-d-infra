@@ -43,7 +43,7 @@ helm-uninstall: ## Uninstall the Helm release
 
 ##@ Automation
 
-.Phony: bump-chart-version-%
-bump-chart-version-%: ## Bump chart version by type (patch, major, minor)
+.PHONY: bump-chart-version-%
+bump-chart-version-%:  ## Bump chart version by type (patch, major, minor)
 	@printf "\033[33;1m==== Running bump chart version ====\033[0m\n"
 	helpers/scripts/increment-chart-version.sh $*
