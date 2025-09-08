@@ -61,19 +61,6 @@ decode:
       - "--max-model-len"
       - "32000"
     env:
-      # Intel XPU specific environment variables
-      - name: HTTP_PROXY
-        value: http://proxy-dmz.intel.com:911
-      - name: HTTPS_PROXY
-        value: http://proxy-dmz.intel.com:912
-      - name: http_proxy
-        value: http://proxy-dmz.intel.com:911
-      - name: https_proxy
-        value: http://proxy-dmz.intel.com:912
-      - name: NO_PROXY
-        value: localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,.local,.intel.com
-      - name: no_proxy
-        value: localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,.local,.intel.com
       - name: VLLM_NIXL_SIDE_CHANNEL_HOST
         valueFrom:
           fieldRef:
@@ -82,8 +69,6 @@ decode:
         value: "tcp"
       - name: VLLM_WORKER_MULTIPROC_METHOD
         value: "spawn"
-      - name: VLLM_ENABLE_V1_MULTIPROCESSING
-        value: "0"
       - name: VLLM_USE_V1
         value: "1"
 
@@ -141,19 +126,6 @@ prefill:
       - "--max-model-len"
       - "32000"
     env:
-      # Intel XPU specific environment variables
-      - name: HTTP_PROXY
-        value: http://proxy-dmz.intel.com:911
-      - name: HTTPS_PROXY
-        value: http://proxy-dmz.intel.com:912
-      - name: http_proxy
-        value: http://proxy-dmz.intel.com:911
-      - name: https_proxy
-        value: http://proxy-dmz.intel.com:912
-      - name: NO_PROXY
-        value: localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,.local,.intel.com
-      - name: no_proxy
-        value: localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,.local,.intel.com
       - name: VLLM_NIXL_SIDE_CHANNEL_HOST
         valueFrom:
           fieldRef:
@@ -162,8 +134,6 @@ prefill:
         value: "tcp"
       - name: VLLM_WORKER_MULTIPROC_METHOD
         value: "spawn"
-      - name: VLLM_ENABLE_V1_MULTIPROCESSING
-        value: "0"
       - name: VLLM_USE_V1
         value: "1"
     ports:
